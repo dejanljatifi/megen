@@ -1,0 +1,178 @@
+{{define "general"}}
+<div class="row mb-3">
+    <label for="user" class="col-sm-4 col-form-label">Process</label>
+    <div class="col-sm-8">
+        <input type="text" class="form-control" id="user" name="user" x-model='general.Process' placeholder="Please provide the process for file naming" required>
+    </div>
+</div>
+<div class="row mb-3">
+    <label for="aimFolder" class="col-sm-4 col-form-label">Folder selection</label>
+    <div class="col-sm-8">
+        <span class="btn-primary btn" @click="fetch('/directory').then(r=>r.json()).then(r=>general.Directory=r.dir)">Folder</span>
+        <span x-text="general.Directory==''?'Please select an folder to store your order':general.Directory"></span>
+        <input type="hidden" x-model="general.Directory" :value="general.Directory" name="aimFolder">
+    </div>
+</div>
+<div class="row mb-3">
+    <label for="user" class="col-sm-4 col-form-label">User abbreviation</label>
+    <div class="col-sm-8">
+        <input type="text" class="form-control" id="user" name="user" x-model='general.UserAbbreviation' placeholder="Please provide your user abbreviation" required>
+    </div>
+</div>
+<div class="row mb-3">
+    <label for="orgCode" class="col-sm-4 col-form-label">OrgCode</label>
+    <div class="col-sm-8">
+        <input x-model='general.OrgCode' type="text" class="form-control" id="orgCode" value="SCMPD" name="orgCode">
+    </div>
+</div>
+<div class="row mb-3">
+    <label for="mailpartner" class="col-sm-4 col-form-label">Mailpartner</label>
+    <div class="col-sm-8">
+        <input x-model='general.Mailpartner' type="text" class="form-control" id="mailpartner" value="TSTOBLE" name="mailpartner">
+    </div>
+</div>
+<div class="row mb-3">
+    <label for="seller" class="col-sm-4 col-form-label">Sellerno.</label>
+    <div class="col-sm-8">
+        <input x-model='general.Seller' type="text" class="form-control" id="seller" value="01_WEB" name="seller">
+    </div>
+</div>
+<div class="row mb-3">
+    <label for="plantcode" class="col-sm-4 col-form-label">Plantcode</label>
+    <div class="col-sm-8">
+        <input x-model='general.Plantcode' type="text" class="form-control" id="plantcode" value="POR_03" name="plantcode">
+    </div>
+</div>
+<div class="row mb-3">
+    <label for="unloadingPoint" class="col-sm-4 col-form-label">Unloading Point</label>
+    <div class="col-sm-8">
+        <input x-model='general.UnloadingPoint' type="text" class="form-control" id="unloadingPoint" value="Warehouse" name="unloadingPoint">
+    </div>
+</div>
+<div class="row mb-3">
+    <label class="col-sm-4 col-form-label">Unit of measurement</label>
+    <div class="col-sm-8">
+        <div class="dropdown" x-data="{selected:'EA'}">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-expanded="false" x-text="selected">
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" href="#" @click.prevent="selected='EA'">EA</a></li>
+                <li><a class="dropdown-item" href="#" @click.prevent="selected='PCE'">PCE</a></li>
+                <li><a class="dropdown-item" href="#" @click.prevent="selected='KGM'">KGM</a></li>
+                <li><a class="dropdown-item" href="#" @click.prevent="selected='MTR'">MTR</a></li>
+            </ul>
+            <input x-model='general.UnitOfMeasurement' type="hidden" name="unit" :value="selected">
+        </div>
+    </div>
+</div>
+<!-- TOBE: Starnummer muss hochzählen-->
+<div class="row mb-3">
+    <label for="start" class="col-sm-4 col-form-label">Starting number</label>
+    <div class="col-sm-8">
+        <input x-model.number="general.StartingNumber" type="number" class="form-control" id="start" value="1" min="1" name="start">
+    </div>
+</div>
+<div class="row mb-3">
+    <label for="filenumber" class="col-sm-4 col-form-label">Number of files</label>
+    <div class="col-sm-8">
+        <input x-model.number="general.NumberOfFiles" type="number" class="form-control" id="filenumber" value="1" min="1" name="filenumber">
+    </div>
+</div>
+<div class="row mb-3">
+    <label class="col-sm-4 col-form-label">Number of positions</label>
+    <div class="col-sm-8">
+        <input x-model.number="general.NumberOfPositions" type="number" class="form-control" id="positionnumber" value="1" min="1" name="positionnumber">
+    </div>
+</div>
+<div class="row mb-3">
+    <label for="währung" class="col-sm-4 col-form-label">Currency</label>
+    <div class="col-sm-8">
+        <input x-model='general.Currency' type="text" class="form-control" id="währung" value="EUR" maxlength="3" name="currency">
+    </div>
+</div>
+<div class="row mb-3">
+    <label class="col-sm-4 col-form-label">Delivery</label>
+    <div class="col-sm-8">
+        <div class="dropdown" x-data="{selected:'DY'}">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="delivery" data-toggle="dropdown" aria-expanded="false" x-text="selected">
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" href="#" @click.prevent="selected='DN'">DN</a></li>
+                <li><a class="dropdown-item" href="#" @click.prevent="selected='DY'">DY</a></li>
+                <li><a class="dropdown-item" href="#" @click.prevent="selected='BK'">BK</a></li>
+                <li><a class="dropdown-item" href="#" @click.prevent="selected='SC'">SC</a></li>
+            </ul>
+            <input x-model='general.Delivery' type="hidden" name="delivery" :value="selected">
+        </div>
+    </div>
+</div>
+<!--
+<div class="row mb-3">
+    <label class="col-sm-4 col-form-label">Invoice</label>
+    <div class="col-sm-8">
+        <div class="form-check">
+            <input x-model='general.Invoice' class="form-check-input" type="radio" value="Y" name="invoice">
+            <label class="form-check-label" >
+                Yes
+            </label>
+        </div>
+        <div class="form-check">
+            <input x-model='general.Invoice' class="form-check-input" type="radio" value="N" checked name="invoice">
+            <label class="form-check-label" >
+                No
+            </label>
+        </div>
+    </div>
+</div>
+<div class="row mb-3">
+    <label class="col-sm-4 col-form-label">Order reply</label>
+    <div class="col-sm-8">
+        <div class="form-check">
+            <input x-model='general.OrderReply' class="form-check-input" type="radio" value="Y" name="answer">
+            <label class="form-check-label" >
+                Yes
+            </label>
+        </div>
+        <div class="form-check">
+            <input x-model='general.OrderReply' class="form-check-input" type="radio" value="N" checked name="answer">
+            <label class="form-check-label" >
+                No
+            </label>
+        </div>
+    </div>
+</div>-->
+<div class="row mb-3">
+    <label class="col-sm-4 col-form-label">Level of consignee</label>
+    <div class="col-sm-8">
+        <div class="form-check">
+            <input x-model='general.ConsigneeLevel' class="form-check-input" type="radio" value="OrderLevel" name="consigeeLevel">
+            <label class="form-check-label" >
+                Order Level
+            </label>
+        </div>
+        <div class="form-check">
+            <input x-model='general.ConsigneeLevel' class="form-check-input" type="radio" value="PositionLevel" checked name="consigeeLevel">
+            <label class="form-check-label" >
+                Position Level
+            </label>
+        </div>
+    </div>
+</div>
+<div class="row mb-3">
+    <label class="col-sm-4 col-form-label">Level of invoicee</label>
+    <div class="col-sm-8">
+        <div class="form-check">
+            <input x-model='general.InvoiceeLevel' class="form-check-input" type="radio" value="OrderLevel" name="invoiceeLevel">
+            <label class="form-check-label" >
+                Order Level
+            </label>
+        </div>
+        <div class="form-check">
+            <input x-model='general.InvoiceeLevel' class="form-check-input" type="radio" value="PositionLevel" checked name="invoiceeLevel">
+            <label class="form-check-label" >
+                Position Level
+            </label>
+        </div>
+    </div>
+</div>
+{{end}}

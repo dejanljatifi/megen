@@ -1,0 +1,14 @@
+{{define "createInputButton"}}
+  <div x-show="editmode" class="card mb-3" x-data="{ sectionName: '' }" style="border:none">
+            <div class="row">
+                <div class="col-auto">
+                    <input class="form-control" type="text" x-model="sectionName" placeholder="Section Name">
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-primary" :disabled="sectionName===''"
+                    @click="fetch('/addSection?name='+sectionName).then(r => r.json()).then(r => {r.Inputs=[]; sections.push(r); sectionName=''})"
+                    >+</button>
+                </div>
+            </div>
+        </div>
+{{end}}

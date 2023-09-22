@@ -1,0 +1,27 @@
+{{define "options"}}
+    <div class="card mb-5">
+        <div class="card-header">
+            <h1 class="display-6">MeGen</h1>
+        </div>
+        <div class="card-body" x-data="{ menu:'General' }">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link" :class="menu==='General'&&'active'" @click="menu='General'" role="button">General</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" :class="menu==='TestCases'&&'active'" @click="menu='TestCases'" role="button">Test Cases</a>
+                </li>
+            </ul>
+            <div class="p-3">
+                <div x-show="menu==='General'">
+                    {{template "general"}}
+                </div>
+
+                <div x-show="menu==='TestCases'">
+                    {{template "testCases"}}
+                </div>
+
+            </div>
+        </div>
+    </div>
+{{end}}

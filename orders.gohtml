@@ -1,0 +1,134 @@
+{{- /*gotype: megen/models.Inputs*/ -}}
+<html lang="de">
+
+<head>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+            crossorigin="anonymous"></script>
+    <title>MeGen</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .card-header {
+            border-bottom: none !important;
+        }
+    </style>
+</head>
+
+<body 
+    x-data="{ sections: {{.Json}}, editmode:false, 
+    general:{
+        Directory: '',
+        UserAbbreviation: '',
+        OrgCode:'SCMPD',
+        Mailpartner:'TSTOBLE',
+        Seller:'01_WEB',
+        Plantcode:'POR_03',
+        UnloadingPoint:'Warehouse',
+        UnitOfMeasurement:'EA',
+        StartingNumber:1,
+        NumberOfFiles:1,
+        NumberOfPositions:1,
+        Currency:'EUR',
+        Delivery:'DY',
+        Invoice:'Y',
+        OrderReply:'N',
+        ConsigneeLevel: 'N',
+        InvoiceeLevel: 'N',
+    }
+    }" 
+    @sendform.window="fetch('/submit', {method: 'POST', body: JSON.stringify({sections:sections, general:general})})">
+<div class="container pt-3 pb-3 mb-5">
+
+    {{template "options"}}
+
+    <div id="accordion">
+
+        <template x-for="section in sections">
+            <div class="card mb-3" x-data="{ open: false }">
+                <div class="card-header">
+                    <a class="btn btn-outline-primary" x-text="section.Name" role="button" @click="open=!open"></a>
+                    <a class="btn btn-outline-danger" role="button" @click="fetch('/deleteSection?id='+section.ID).then(r => {sections = sections.filter(s=> s.ID != section.ID)})" x-show="editmode">Delete</a>
+                </div>
+                <div class="card-body" x-show="open">
+
+                    <template x-for="input in section.Inputs">
+                        <div class="row mb-3 ps-3">
+                            <template x-if="input.Children.length == 1">
+                                <div class="row mb-3 ps-3">
+                                    <div class="form-check col-sm-4">
+                                        <label>
+                                            <input x-model="input.Checked" :class="input.Type==='text'&&'form-control'"
+                                                   :type="input.Type" :id="input.EdiNumber" :name="input.EdiNumber" :disabled="input.Disabled">
+                                            <span x-text="input.Label"></span>
+                                            <span class="fst-italic" x-text="'('+input.EdiNumber+')'" ></span>
+                                        </label>
+                                    </div>
+                                    <div class="form-check col-sm-4">
+                                        <label>
+                                            <input :value="input.Value" x-model="input.Children[0].Value"
+                                                   :disabled="!input.Checked"
+                                                   :class="input.Children[0].Type==='text'&&'form-control'"
+                                                   :type="input.Children[0].Type" :id="input.Children[0].EdiNumber"
+                                                   :name="input.Children[0].EdiNumber">
+                                            <span x-text="input.Children[0].Label"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template x-if="input.Children.length !== 1">
+                                <div>
+                                    <div class="row mb-3 ps-3">
+                                        <div class="col-sm-4">
+                                            <label>
+                                                <input x-model="input.Checked"
+                                                       :class="input.Type==='text'&&'form-control'" :type="input.Type"
+                                                       :id="input.EdiNumber" :name="input.EdiNumber" :disabled="input.Disabled">
+                                                <span x-text="input.Label"></span>
+                                                <span class="fst-italic" x-text="'('+input.EdiNumber+')'" ></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <template x-for="child in input.Children">
+                                        <div class="row mb-3 ps-5">
+                                            <label>
+                                                <input :disabled="!input.Checked" x-model="child.Value"
+                                                       :value="child.Value" :class="child.Type==='text'&&'form-control'"
+                                                       :type="child.Type" :id="child.EdiNumber" :name="child.EdiNumber">
+                                                <span x-text="child.Label"></span>
+                                            </label>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                    {{template "createInputButton"}}
+                </div>
+
+            </div>
+        </template>
+
+        <div x-show="editmode" class="card mb-3" x-data="{ sectionName: '' }" style="border:none">
+            <div class="row">
+                <div class="col-auto">
+                    <input class="form-control" type="text" x-model="sectionName" placeholder="Section Name">
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-primary" :disabled="sectionName===''"
+                    @click="fetch('/addSection?name='+sectionName).then(r => r.json()).then(r => {r.Inputs=[]; sections.push(r); sectionName=''})"
+                    >Create Section</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{{template "footer"}}
+</body>
+
+</html>

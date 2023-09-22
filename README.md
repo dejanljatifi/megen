@@ -1,9 +1,7 @@
-# MeGen - Message Generator Tool 
+# megen
 
-The message generator tool is making it easy to generate EDIFACT messages of variable length for all relevant SCC processes.
+run  megen like this:
 
-- DELFOR
-- Kanban
-- ASN
-- Stock Movements
-- Orders
+```sh
+go run cmd/megen/main.go
+```
